@@ -39,6 +39,7 @@ declare class FirekitAuth {
      * Sends an email with a login link to the user.
      * @param email User's email
      * @param redirectUrl URL to redirect to after clicking. Must be authorized domain in Firebase settings.
+     * @throws {Error} If sign-in fails
      */
     signInWithEmailLink(email: string, redirectUrl: string): Promise<void>;
     /**

@@ -1,7 +1,7 @@
 /**
  * @module FirekitAuth
  */
-import { GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential, signInWithEmailLink } from 'firebase/auth';
+import { GoogleAuthProvider, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, updatePassword, EmailAuthProvider, reauthenticateWithCredential, sendSignInLinkToEmail } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { firebaseService } from '../firebase.js';
 import { firekitDocMutations } from '../firestore/document-mutations.svelte.js';
@@ -55,9 +55,13 @@ class FirekitAuth {
      * Sends an email with a login link to the user.
      * @param email User's email
      * @param redirectUrl URL to redirect to after clicking. Must be authorized domain in Firebase settings.
+     * @throws {Error} If sign-in fails
      */
     async signInWithEmailLink(email, redirectUrl) {
-        await signInWithEmailLink(this.auth, email, redirectUrl);
+        await sendSignInLinkToEmail(this.auth, email, {
+            url: redirectUrl,
+            handleCodeInApp: true
+        });
     }
     /**
      * Registers new user with email and password
