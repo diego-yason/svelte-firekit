@@ -15,7 +15,7 @@ import {
 	type User,
 	EmailAuthProvider,
 	reauthenticateWithCredential,
-	signInWithEmailLink
+	sendSignInLinkToEmail
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { firebaseService } from '../firebase.js';
@@ -76,9 +76,13 @@ class FirekitAuth {
 	 * Sends an email with a login link to the user.
 	 * @param email User's email
 	 * @param redirectUrl URL to redirect to after clicking. Must be authorized domain in Firebase settings.
+	 * @throws {Error} If sign-in fails
 	 */
 	async signInWithEmailLink(email: string, redirectUrl: string): Promise<void> {
-		await signInWithEmailLink(this.auth, email, redirectUrl);
+		await sendSignInLinkToEmail(this.auth, email, {
+			url: redirectUrl,
+			handleCodeInApp: true
+		});
 	}
 
 	/**
